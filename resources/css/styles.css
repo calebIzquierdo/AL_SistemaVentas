@@ -1,0 +1,81 @@
+/* Estilo común base para botones */
+.custom-edit,
+.custom-delete,
+.custom-view {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Botón Editar */
+.custom-edit {
+  background-color: #fff8e1;
+  color: #f9a825;
+  border-color: #f9a825;
+  border: none;
+  box-shadow: none;
+}
+
+/* Botón Eliminar */
+.custom-delete {
+  background-color: #ffebee;
+  color: #e53935;
+  border-color: #e53935;
+  border: none;
+  box-shadow: none;
+}
+
+/* Botón Ver Imagen */
+.custom-view {
+  background-color: #e3f2fd;  /* azul claro */
+  color: #1e88e5;             /* azul vivo */
+  border-color: #1e88e5;
+  border: none;
+  box-shadow: none;
+}
+
+/* Hover effects para todos */
+.custom-edit:hover,
+.custom-delete:hover,
+.custom-view:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Centrar texto de tabla */
+table.dataTable td {
+  vertical-align: middle;
+}
+
+/* Margen inferior entre filas */
+table.dataTable tbody tr {
+  margin-bottom: 4px;
+}
+
+/* Ajustes de longitud */
+.custom-length-wrapper {
+  margin-left: 16rem;
+}
+
+/* SweetAlert personalizado */
+.swal-custom-popup {
+  width: 300px !important;
+  font-size: 14px !important;
+  padding: 1rem !important;
+}
+
+.swal-custom-title {
+  font-size: 18px !important;
+}
+
+.swal-custom-button {
+  padding: 4px 12px !important;
+  font-size: 13px !important;
+}

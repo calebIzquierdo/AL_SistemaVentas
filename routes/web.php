@@ -1,21 +1,54 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\InicioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// vista cliente
+Route::get('/', [InicioController::class, 'index'])->name('inicio.index');
+Route::get('/catalogo', [InicioController::class, 'mostrarCatalogo'])->name('catalogo.index');
 
-// Rutas para el controlador de productos
+
+// Rutas del ejemplo
 Route::get('/products/crear', [ProductController::class, 'crear'])->name('products.crear');
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/leer', [ProductController::class, 'leer'])->name('products.leer');
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{product}', [ProductController::class, 'eliminar'])->name('products.eliminar');
 Route::get('/products/editar/{id}', [ProductController::class, 'editar'])->name('products.editar');
+
+// Rutas para Categorías
+Route::middleware('auth')->group(function () {
+    Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
+    Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
+    Route::put('/categorias/{id_categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
+    Route::delete('/categorias/{id_categoria}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
+    Route::get('/categorias/ajax/listar', [CategoriaController::class, 'ajaxListar'])->name('categorias.ajax.listar');
+});
+
+// Rutas para Usuarios
+Route::middleware('auth')->group(function () {
+    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+    Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+    Route::put('/usuarios/{id_usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
+    Route::delete('/usuarios/{id_usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
+    Route::get('/usuarios/ajax/listar', [UsuarioController::class, 'ajaxListar'])->name('usuarios.ajax.listar');
+});
+
+//Rutas Productos
+Route::middleware('auth')->group(function () {
+    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+    Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
+    Route::put('/productos/{id_producto}', [ProductoController::class, 'update'])->name('productos.update');
+    Route::delete('/productos/{id_producto}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+    Route::get('/productos/ajax/listar', [ProductoController::class, 'ajaxListar'])->name('productos.ajax.listar');
+});
 
 // Autenticación
 Route::get('/login', function () { return view('auth.login');})->name('login');
@@ -29,3 +62,13 @@ Route::get('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+
+//// Authentication routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Ruta protegida
+Route::middleware('auth')->group(function () {
+    
+});
