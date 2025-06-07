@@ -1,81 +1,148 @@
-/* Estilo común base para botones */
-.custom-edit,
-.custom-delete,
-.custom-view {
-  width: 30px;
-  height: 30px;
+/* RESET y estructura base */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  
+}
+
+.main-content {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Estilo para el botón de búsqueda */
+button[title="Buscar"] {
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.2s ease;
+}
+
+button[title="Buscar"]:hover {
+  background-color: #e2e6ea;
+}
+
+/* Carrusel */
+#carouselPortada {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 0 !important;
+}
+
+.carousel-bg {
+  height: 80vh;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6);
+}
+
+.carousel-caption {
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+  text-align: center;
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Estilos para tarjetas horizontales (si usas galería) */
+.scroll-horizontal {
   display: flex;
+  flex-wrap: nowrap;
   justify-content: center;
-  align-items: center;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Botón Editar */
-.custom-edit {
-  background-color: #fff8e1;
-  color: #f9a825;
-  border-color: #f9a825;
-  border: none;
-  box-shadow: none;
+.scroll-horizontal::-webkit-scrollbar {
+  display: none;
 }
 
-/* Botón Eliminar */
-.custom-delete {
-  background-color: #ffebee;
-  color: #e53935;
-  border-color: #e53935;
-  border: none;
-  box-shadow: none;
+.card-horizontal {
+  flex-shrink: 0;
+  width: 240px;
+  scroll-snap-align: start;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
-/* Botón Ver Imagen */
-.custom-view {
-  background-color: #e3f2fd;  /* azul claro */
-  color: #1e88e5;             /* azul vivo */
-  border-color: #1e88e5;
-  border: none;
-  box-shadow: none;
+.card-horizontal:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Hover effects para todos */
-.custom-edit:hover,
-.custom-delete:hover,
-.custom-view:hover {
-  opacity: 0.9;
-  transform: scale(1.05);
+.card-horizontal img {
+  height: 220px;
+  object-fit: cover;
 }
 
-/* Centrar texto de tabla */
-table.dataTable td {
-  vertical-align: middle;
+.card-body {
+  text-align: center;
 }
 
-/* Margen inferior entre filas */
-table.dataTable tbody tr {
-  margin-bottom: 4px;
+.card-body h6 {
+  margin-bottom: 0.25rem;
+  font-weight: bold;
 }
 
-/* Ajustes de longitud */
-.custom-length-wrapper {
-  margin-left: 16rem;
+.card-body small {
+  color: #6c757d;
 }
 
-/* SweetAlert personalizado */
-.swal-custom-popup {
-  width: 300px !important;
-  font-size: 14px !important;
-  padding: 1rem !important;
+.card-body .fw-bold {
+  margin-top: 0.5rem;
+  color:#003366;
 }
 
-.swal-custom-title {
-  font-size: 18px !important;
+.info-negocio i {
+  color: #003366;
+}
+.info-negocio hr {
+  border-top: 2px solid #003366;
+  opacity: 1;
 }
 
-.swal-custom-button {
-  padding: 4px 12px !important;
-  font-size: 13px !important;
+.banner-conf {
+  height: 400px;
+  overflow: hidden;
 }
+
+  .titulo-decorado {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    font-style: italic;
+    color: #db6e2a; /* Color vino oscuro */
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+
+  .titulo-decorado::before,
+  .titulo-decorado::after {
+    content: "······························";
+    color: #d9b76c; /* Dorado claro */
+    font-size: 2rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  .titulo-decorado::before {
+    right: 100%;
+    margin-right: 10px;
+  }
+
+  .titulo-decorado::after {
+    left: 100%;
+    margin-left: 10px;
+  }

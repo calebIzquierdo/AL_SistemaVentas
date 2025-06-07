@@ -11,8 +11,8 @@
   <!-- Header -->
   <header>
     <div class="logo">
-      <img src="/logo.png" alt="Logo" />
-      <span>DB System</span>
+      <img src="imagenes/logo.png" alt="Logo" />
+      <span>Confecciones</span>
     </div>
     <nav>
       <a href="#">Inicio</a>
