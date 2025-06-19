@@ -13,19 +13,28 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'correo' => 'required|email',
-            'contrasena' => 'required'
-        ]);
+{
+    $credentials = $request->validate([
+        'correo' => 'required|email',
+        'contrasena' => 'required'
+    ]);
 
-        if (Auth::attempt(['correo' => $credentials['correo'], 'password' => $credentials['contrasena']])) {
-            $request->session()->regenerate();
-            return redirect()->intended('/usuarios'); // Redirige a la ruta de usuarios
+    if (Auth::attempt(['correo' => $credentials['correo'], 'password' => $credentials['contrasena']])) {
+        $request->session()->regenerate();
+        $usuario = Auth::user();
+
+        if ($usuario->id_tipo_usuario == 1) {
+            // Admin
+            return redirect()->intended('/usuarios');
+        } else {
+            // Cliente
+            return redirect()->route('inicio.index'); // o la ruta del catálogo
         }
-
-        return back()->withErrors(['correo' => 'Credenciales inválidas.'])->withInput();
     }
+
+    return back()->withErrors(['correo' => 'Credenciales inválidas.'])->withInput();
+}
+
 
     public function logout(Request $request)
     {

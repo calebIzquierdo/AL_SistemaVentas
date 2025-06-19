@@ -30,38 +30,26 @@
   </button>
 </div>
 
-
 <!-- Título decorativo de sección -->
 <section class="text-center my-5">
   <h2 class="titulo-decorado">Nuestros Productos</h2>
 </section>
-
-
 
 <!-- Catálogo de productos -->
 <div class="container py-4">
   <div class="row g-4 justify-content-center">
     @foreach($productos as $producto)
     <div class="col-12 col-sm-6 col-md-3">
-      <div class="card card-horizontal h-100"
-           data-bs-toggle="modal"
-           data-bs-target="#modalDetalleProducto"
-           onclick="mostrarDetalle(
-              '{{ asset('storage/' . $producto->imagen) }}',
-              '{{ $producto->nombre_producto }}',
-              '{{ $producto->categoria->nombre ?? 'Sin categoría' }}',
-              '{{ $producto->talla }}',
-              '{{ number_format($producto->precio, 2) }}'
-           )">
+      <div class="card card-horizontal h-100">
         <img src="{{ asset('storage/' . $producto->imagen) }}" class="card-img-top" alt="{{ $producto->nombre_producto }}">
         <div class="card-body">
           <h6>{{ $producto->nombre_producto }}</h6>
           <small>{{ $producto->categoria->nombre ?? 'Sin categoría' }}</small>
           <div class="fw-bold">S/ {{ number_format($producto->precio, 2) }}</div>
-               <div class="d-flex justify-content-center gap-2 mt-auto">
+          <div class="d-flex justify-content-center gap-2 mt-auto">
             <!-- Botón carrito -->
-            <button class="btn btn-outline-success btn-sm" onclick="agregarAlCarritoDesdeCatalogo('{{ $producto->id }}')">
-              <i class="fas fa-shopping-cart"></i>
+            <button class="btn btn-outline-success btn-sm agregar-al-carrito" data-product-id="{{ $producto->id_producto }}" data-product-name="{{ $producto->nombre_producto }}" data-product-price="{{ $producto->precio }}">
+              <i class="fas fa-shopping-cart"></i> Añadir al carrito
             </button>
 
             <!-- Botón detalle -->
@@ -73,7 +61,8 @@
                       '{{ $producto->nombre_producto }}',
                       '{{ $producto->categoria->nombre ?? 'Sin categoría' }}',
                       '{{ $producto->talla }}',
-                      '{{ number_format($producto->precio, 2) }}'
+                      '{{ number_format($producto->precio, 2) }}',
+                      '{{ $producto->id_producto }}'
                     )">
               Detalle
             </button>
@@ -84,66 +73,89 @@
     @endforeach
   </div>
 </div>
-<!-- Título decorativo de sección -->
-<section class="text-center my-8">
-  <h2 class="titulo-decorado">Conoce sobre Nosotros</h2>
-</section>
 
-<!-- Sección destacada de presentación -->
-<section class="info-negocio py-5 text-center text-dark animate__animated animate__fadeInUp">
-  <div class="container">
-    <h2 class="fw-bold mb-3 text-primary animate__animated animate__fadeInDown">Ropa Deportiva & Confecciones a tu Estilo</h2>
-
-    <div class="mb-4">
-      <hr class="w-25 d-inline-block me-3 border-primary">
-      <i class="fas fa-tshirt fa-lg text-primary"></i>
-      <hr class="w-25 d-inline-block ms-3 border-primary">
-    </div>
-
-    <p class="lead text-muted mb-4 animate__animated animate__fadeInUp animate__delay-1s">
-      En nuestra tienda encontrarás prendas deportivas personalizadas, cómodas y hechas a medida.
-      Nos especializamos en confecciones para equipos, empresas y personas que buscan estilo y calidad.
-    </p>
-
-    <p class="text-secondary fst-italic animate__animated animate__fadeInUp animate__delay-2s">
-      Uniformes | Polos deportivos | Ropa personalizada | Bordados y más...
-    </p>
-  </div>
-@endsection
-
-
-@section('modals')
-<div class="modal fade" id="modalDetalleProducto" tabindex="-1" aria-labelledby="modalDetalleProductoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalDetalleProductoLabel">Detalle del Producto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body text-center">
-        <img id="detalleImagen" src="" class="img-fluid mb-3" style="max-height: 250px;" alt="Imagen del producto">
-        <h5 id="detalleNombre" class="fw-bold mb-1"></h5>
-        <p id="detalleCategoria" class="text-muted mb-1"></p>
-        <p id="detalleTalla" class="mb-1"></p>
-        <div id="detallePrecio" class="fw-bold fs-5 text-primary mb-3"></div>
-        <button class="btn btn-success" onclick="agregarAlCarrito()">Añadir al carrito</button>
-      </div>
-    </div>
-  </div>
+<!-- Ícono flotante del carrito -->
+<div id="carritoFlotante" class="carrito-flotante">
+  <a href="#" data-bs-toggle="modal" data-bs-target="#modalCarrito">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="carrito-cantidad" class="badge rounded-pill bg-danger">0</span>
+  </a>
 </div>
 
 @endsection
 
+@section('modals')
+<!-- Modal Ver Carrito -->
+<div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCarritoLabel">Mi Carrito</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Tabla de productos del carrito -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="carrito-contenido">
+            <!-- Los productos se llenarán aquí con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <strong>Total: <span id="carrito-total">S/ 0.00</span></strong>
+        <button class="btn btn-primary" id="btn-finalizar">Finalizar compra</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal de Perfil -->
+<!-- Modal de Perfil -->
+<div class="modal fade" id="modalPerfil" tabindex="-1" aria-labelledby="modalPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Verificar si el usuario está autenticado -->
+                <h5 class="modal-title" id="modalPerfilLabel">
+                    Perfil de {{ auth()->check() ? auth()->user()->nombre : 'Invitado' }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Información del usuario -->
+                <p><strong>Nombre:</strong> {{ auth()->check() ? auth()->user()->nombre : 'No disponible' }}</p>
+                <p><strong>Email:</strong> {{ auth()->check() ? auth()->user()->correo : 'No disponible' }}</p>
+                <p><strong>Celular:</strong> {{ auth()->check() ? auth()->user()->celular : 'No disponible' }}</p>
+                <p><strong>Dirección:</strong> {{ auth()->check() ? auth()->user()->direccion : 'No disponible' }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+
+
+@endsection
 
 @section('scripts')
 <script>
-  function mostrarDetalle(imagen, nombre, categoria, talla, precio) {
-    document.getElementById('detalleImagen').src = imagen;
-    document.getElementById('detalleNombre').textContent = nombre;
-    document.getElementById('detalleCategoria').textContent = 'Categoría: ' + categoria;
-    document.getElementById('detalleTalla').textContent = 'Talla: ' + talla;
-    document.getElementById('detallePrecio').textContent = 'S/ ' + precio;
-  }
+  const routes = {
+    agregar: "{{ route('carrito.agregar') }}",  
+    actualizar: "{{ route('carrito.actualizar') }}",
+    quitar: "{{ route('carrito.quitar', ['productoId' => '__ID__']) }}",
+  };
 </script>
+
+@vite(['resources/js/vistas.js']) <!-- Asegúrate que el archivo está cargado correctamente -->
 @endsection

@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>@yield('title', 'Login - DB System')</title>
   <link rel="icon" href="{{ asset('favicon.ico') }}">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   @vite(['resources/css/styles.css'])
@@ -40,12 +44,40 @@
           <li class="nav-item"><a class="nav-link text-white" href="#">Servicios</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="#">Nosotros</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="#">Contáctanos</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="{{ route('login') }}">Login</a></li>
+          @guest
+            <li class="nav-item"><a class="nav-link text-white" href="{{ route('login') }}">Login</a></li>
+          
+          @endguest
+           <!-- Icono Carrito -->
+          <li class="nav-item"> <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#modalCarrito" class="text-decoration-none position-relative">
+              <i class="fas fa-shopping-cart fa-lg"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="carrito-cantidad">0</span>
+            </a>
+          </li>  
         </ul>
 
-        <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" title="Buscar">
-          <i class="fas fa-search text-primary"></i>
-        </button>
+        <!-- Search + Usuario + Carrito -->
+        <div class="search-box d-flex align-items-center gap-3">
+          🔍 Buscar
+
+          @auth
+            <!-- Usuario -->
+            <div class="dropdown">
+              <a class="dropdown-toggle text-decoration-none nav-link text-white" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ auth()->user()->nombre }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfil">Ver perfil</a></li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          @endauth
+        </div>
       </div>
     </div>
   </nav>
@@ -87,7 +119,12 @@
   </footer>
 
   <!-- Scripts -->
+  <!-- Cargar jQuery desde CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  @vite(['resources/js/vistas.js'])
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
   @yield('modals')
   @yield('scripts')
 </body>

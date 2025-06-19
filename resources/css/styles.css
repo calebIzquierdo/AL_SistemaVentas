@@ -146,3 +146,120 @@ button[title="Buscar"]:hover {
     left: 100%;
     margin-left: 10px;
   }
+
+  /* Alertas*/
+  /* Estilo para la alerta flotante */
+.alerta {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+.alertaWarning {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f3a246;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Estilos para el ícono flotante del carrito */
+.carrito-flotante {
+  position: fixed;
+  bottom: 20px;  /* Espacio desde la parte inferior */
+  right: 20px;   /* Espacio desde la parte derecha */
+  background-color: #28a745;
+  color: white;
+  padding: 12px;
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.carrito-flotante:hover {
+  transform: scale(1.1); /* Efecto de hover para hacer el ícono un poco más grande */
+}
+
+.carrito-flotante a {
+  color: white;
+  text-decoration: none;
+}
+
+#carrito-cantidad {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 0.9rem;
+}
+
+/* Centrar el input dentro de su contenedor */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* Centrar verticalmente */
+  align-items: center;  /* Centrar horizontalmente */
+  text-align: center;  /* Asegura que el texto y otros elementos se centren */
+}
+
+#cantidadProducto {
+  width: auto;
+  min-width: 50px;   /* Establecer un tamaño mínimo */
+  text-align: center;  /* Centrar el texto dentro del input */
+  max-width: 120px;    /* Limitar el tamaño máximo si es necesario */
+  font-size: 1.2rem;   /* Aumentar ligeramente el tamaño de la fuente */
+  padding: 0.4rem;     /* Reducir el padding para que no ocupe demasiado espacio */
+}
+
+/*vista contraseña login*/
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px; /* Mayor espacio para el ícono */
+}
+
+.password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+}
+
+small {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+}
+/* Modal registro */
+/* Mayor espacio para el ícono */
+
+
+
+
+

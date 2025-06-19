@@ -1,97 +1,52 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Registro - DB System</title>
-  <link rel="stylesheet" href="{{ asset('css/register.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
+@extends('layouts.vista')
 
+@section('title', 'Registro de Usuario')
 
-  <!-- Header -->
-  <header>
-    <div class="logo">
-      <img src="imagenes/logo.png" alt="Logo" />
-      <span>Confecciones</span>
+@section('content')
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px;">
+        <div class="card-header text-center bg-primary text-white">
+            <h4>¡Regístrate !</h4>
+        </div>
+        <div class="card-body">
+            <form id="form-registro" method="POST">
+                @csrf
+
+                <div class="form-group mb-3">
+                    <label for="nombre" class="form-label">Nombre completo</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ingresa tu nombre completo" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="correo" class="form-label">Correo electrónico</label>
+                    <input type="email" name="correo" id="correo" class="form-control" placeholder="Ingresa tu correo" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="celular" class="form-label">Número de celular</label>
+                    <input type="text" name="celular" id="celular" class="form-control" placeholder="Ingresa tu celular">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ingresa tu dirección">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="contrasena" class="form-label">Contraseña</label>
+                    <input type="password" name="contrasena" id="contrasena" class="form-control" placeholder="Ingresa tu contraseña" required>
+                </div>
+
+                <input type="hidden" name="estado" value="1">
+                <input type="hidden" name="id_tipo_usuario" value="2">
+
+                <!-- Botones para enviar o cancelar el registro -->
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success w-48">Registrar</button>
+                    <a href="" class="btn btn-outline-secondary w-48">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
-    <nav>
-      <a href="#">Inicio</a>
-      <a href="#">Categorías</a>
-      <a href="#">Servicios</a>
-      <a href="#">Nosotros</a>
-      <a href="#">Contáctanos</a>
-      <a href="#">Login</a>
-    </nav>
-    <div class="search-box">🔍 Buscar</div>
-  </header>
-
-  <!-- Main -->
-  <div class="main-content">
-    <h1>Bienvenido a tu registro!</h1>
-    <p>Deberás completar estos campos para poder registrado y continuar con tu compra.!</p>
-    <form>
-      <!-- Campo select para documento -->
-      <select class="select-doc">
-        <option value="" disabled selected>Documento</option>
-        <option value="dni">DNI</option>
-        <option value="carnet">Carnet de extranjería</option>
-        <option value="pasaporte">Pasaporte</option>
-        <option value="otro">Otro</option>
-      </select>
-
-      <input type="text" placeholder="Número">
-      <input type="text" placeholder="Nombre y Apellido">
-      <input type="email" placeholder="Correo">
-      <input type="text" placeholder="Número de celular">
-      <input type="text" placeholder="Dirección">
-      <input type="password" placeholder="Contraseña">
-
-      <div class="form-buttons">
-        <button type="submit">Registrar</button>
-        <button type="button">Cancelar</button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <div>
-      <h4>CONTACTANOS</h4>
-      <p>📞 12356789</p>
-      <p>📧 gfg@gmail.com</p>
-      <p>📍 Chiclayo</p>
-    </div>
-    <div>
-      <h4>SERVICIOS</h4>
-      <p>Confección</p>
-      <p>Personalizados/Bordados</p>
-    </div>
-    <div>
-      <h4>NOSOTROS</h4>
-      <p>📘 Historia</p>
-      <p>🎯 Misión / Visión</p>
-      <p>🗺️ Mapa del sitio</p>
-    </div>
-    <div>
-<h4>SÍGUENOS</h4>
-<p>
-  <a href="https://www.facebook.com/" target="_blank">
-    <i class="fab fa-facebook-f"></i> Facebook
-  </a>
-</p>
-<p>
-  <a href="https://www.instagram.com/" target="_blank">
-    <i class="fab fa-instagram"></i> Instagram
-  </a>
-</p>
-<p>
-  <a href="https://wa.me/51999999999" target="_blank">
-    <i class="fab fa-whatsapp"></i> WhatsApp
-  </a>
-</p>
-
-    </div>
-  </footer>
-
-</body>
-</html>
+</div>
+@endsection

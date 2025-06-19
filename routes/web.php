@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\InicioController;
 use Illuminate\Support\Facades\Route;
@@ -9,10 +10,23 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\RegistroController;
 
 // vista cliente
 Route::get('/', [InicioController::class, 'index'])->name('inicio.index');
 Route::get('/catalogo', [InicioController::class, 'mostrarCatalogo'])->name('catalogo.index');
+
+//Registro de usuario
+Route::post('/registro', [RegistroController::class, 'store'])->name('registro.store');
+// Ruta para mostrar el formulario de registro (GET)
+Route::get('/registro', [RegistroController::class, 'showRegisterForm'])->name('registro.form');
+
+///carrito
+Route::get('/carrito', [CarritoController::class, 'verCarrito'])->name('carrito.ver');  // Ver el carrito
+Route::post('/carrito/agregar', [CarritoController::class, 'agregarAlCarrito'])->name('carrito.agregar');  // Agregar producto al carrito
+Route::post('/carrito/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');  // Actualizar cantidad del producto en carrito
+Route::delete('/carrito/{productoId}', [CarritoController::class, 'quitarDelCarrito'])->name('carrito.quitar');  // Eliminar producto del carrito
+
 
 
 // Rutas del ejemplo
@@ -68,7 +82,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
+
 // Ruta protegida
 Route::middleware('auth')->group(function () {
-    
+
 });
