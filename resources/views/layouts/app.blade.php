@@ -30,10 +30,10 @@
     <h4><i class="bi bi-shop"></i> <span>Confecciones</span></h4>
     <ul class="nav nav-pills flex-column">
   <li>
-    <a href="" class="nav-link">
-      <i class="bi bi-speedometer2 me-2"></i>
-      <span class="link-text">Dashboard</span>
-    </a>
+    <a href="{{ route('dashboard') }}" class="nav-link">
+  <i class="bi bi-speedometer2 me-2"></i>
+  <span class="link-text">Dashboard</span>
+</a>
   </li>
   <li>
     <a href="{{ route('categorias.index') }}" class="nav-link">
