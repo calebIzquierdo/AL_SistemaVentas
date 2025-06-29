@@ -120,3 +120,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
 
 });
+
+// ruta reportes 
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Events\Registered;
 use App\Models\Usuario;
 use App\Models\TipoUsuario;
 use Illuminate\Http\Request;
@@ -59,15 +60,18 @@ class UsuarioController extends Controller
             'id_tipo_usuario' => 'required|integer'
         ]);
 
-        Usuario::create([
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
-            'celular' => $request->celular,
-            'direccion' => $request->direccion,
-            'contrasena' => bcrypt($request->contrasena),
-            'estado' => 1,
-            'id_tipo_usuario' => $request->id_tipo_usuario
-        ]);
+       $usuario = Usuario::create([
+    'nombre' => $request->nombre,
+    'correo' => $request->correo,
+    'celular' => $request->celular,
+    'direccion' => $request->direccion,
+    'contrasena' => bcrypt($request->contrasena),
+    'estado' => 1,
+    'id_tipo_usuario' => $request->id_tipo_usuario
+]);
+
+event(new Registered($usuario)); // Envia correo de verificación
+
 
         return response()->json(['message' => 'Usuario creado']);
     }
