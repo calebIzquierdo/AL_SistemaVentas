@@ -11,6 +11,8 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\DatosContactoController;
 
 // vista cliente
 Route::get('/', [InicioController::class, 'index'])->name('inicio.index');
@@ -26,6 +28,7 @@ Route::get('/carrito', [CarritoController::class, 'verCarrito'])->name('carrito.
 Route::post('/carrito/agregar', [CarritoController::class, 'agregarAlCarrito'])->name('carrito.agregar');  // Agregar producto al carrito
 Route::post('/carrito/actualizar', [CarritoController::class, 'actualizarCantidad'])->name('carrito.actualizar');  // Actualizar cantidad del producto en carrito
 Route::delete('/carrito/{productoId}', [CarritoController::class, 'quitarDelCarrito'])->name('carrito.quitar');  // Eliminar producto del carrito
+Route::post('/carrito/finalizar', [CarritoController::class, 'finalizarCompra'])->name('carrito.finalizar');
 
 
 
@@ -45,6 +48,33 @@ Route::middleware('auth')->group(function () {
     Route::delete('/categorias/{id_categoria}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
     Route::get('/categorias/ajax/listar', [CategoriaController::class, 'ajaxListar'])->name('categorias.ajax.listar');
 });
+
+//Rutas para stock
+
+// Rutas para Datos de Contacto
+Route::middleware(['auth'])->group(function () {
+    Route::get('/datos-contacto', [DatosContactoController::class, 'index'])->name('datos-contacto.index');
+    
+    
+    Route::put('/datos-contacto/{id}', [DatosContactoController::class, 'update'])->name('datos_contacto.update');
+    Route::delete('/datos-contacto/{id}', [DatosContactoController::class, 'destroy'])->name('datos_contacto.destroy');
+    Route::get('/datos-contacto/ajax-listar', [DatosContactoController::class, 'ajaxListar'])->name('datos_contacto.ajax.listar');
+});
+
+//ruta para servicios
+Route::get('/datos-contacto/servicio', [DatosContactoController::class, 'servicio'])->name('datos-contacto.servicio');
+Route::post('/datos-contacto', [DatosContactoController::class, 'store'])->name('datos-contacto.store');
+
+//Rutas para stock
+Route::middleware('auth')->group(function () {
+    Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+    Route::post('/stock', [StockController::class, 'store'])->name('stock.store');
+    Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.update');
+    Route::delete('/stock/{id}', [StockController::class, 'destroy'])->name('stock.destroy');
+    Route::get('/stock/ajax/listar', [StockController::class, 'ajaxListar'])->name('stock.ajax.listar');
+    Route::get('/productos-disponibles', [StockController::class, 'getProductosDisponibles'])->name('productosDisponibles');
+});
+
 
 // Rutas para Usuarios
 Route::middleware('auth')->group(function () {
@@ -72,6 +102,8 @@ Route::get('/register', function () { return view('auth.register');})->name('reg
 Route::get('/perfil', [PerfilController::class, 'mostrar'])->name('perfil');
 Route::put('/perfil', [PerfilController::class, 'actualizar'])->name('perfil.actualizar');
 // Ruta para cerrar sesión (corrección final)
+
+
 Route::get('/logout', function () {
     Auth::logout();
     return redirect('/login');

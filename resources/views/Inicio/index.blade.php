@@ -57,15 +57,16 @@
                     data-bs-toggle="modal"
                     data-bs-target="#modalDetalleProducto"
                     onclick="mostrarDetalle(
-                      '{{ asset('storage/' . $producto->imagen) }}',
-                      '{{ $producto->nombre_producto }}',
-                      '{{ $producto->categoria->nombre ?? 'Sin categoría' }}',
-                      '{{ $producto->talla }}',
-                      '{{ number_format($producto->precio, 2) }}',
-                      '{{ $producto->id_producto }}'
+                        '{{ asset('storage/' . $producto->imagen) }}',
+                        '{{ $producto->nombre_producto }}',
+                        '{{ $producto->categoria->nombre ?? 'Sin categoría' }}',
+                        '{{ $producto->talla }}',
+                        '{{ number_format($producto->precio, 2) }}',
+                        '{{ $producto->id_producto }}'
                     )">
-              Detalle
+                Detalle
             </button>
+
           </div>
         </div>
       </div>
@@ -74,13 +75,25 @@
   </div>
 </div>
 
-<!-- Ícono flotante del carrito -->
-<div id="carritoFlotante" class="carrito-flotante">
-  <a href="#" data-bs-toggle="modal" data-bs-target="#modalCarrito">
-    <i class="fas fa-shopping-cart"></i>
-    <span id="carrito-cantidad" class="badge rounded-pill bg-danger">0</span>
-  </a>
+<!-- Alerta flotante de confirmación -->
+<div id="alertaCarrito" class="alert alert-success" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;">
+    Producto agregado al carrito
 </div>
+
+<!-- Alerta flotante de error -->
+<div id="alertaCarritoWarning" class="alert alert-danger" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;">
+    Hubo un problema al agregar el producto
+</div>
+
+<!-- Ícono flotante del carrito -->
+
+<div id="carritoFlotante" class="carrito-flotante">
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalCarrito">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="carrito-cantidad" class="badge"></span>
+    </a>
+</div>
+
 
 @endsection
 
@@ -117,20 +130,18 @@
     </div>
   </div>
 </div>
-<!-- Modal de Perfil -->
+
 <!-- Modal de Perfil -->
 <div class="modal fade" id="modalPerfil" tabindex="-1" aria-labelledby="modalPerfilLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <!-- Verificar si el usuario está autenticado -->
                 <h5 class="modal-title" id="modalPerfilLabel">
                     Perfil de {{ auth()->check() ? auth()->user()->nombre : 'Invitado' }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <!-- Información del usuario -->
                 <p><strong>Nombre:</strong> {{ auth()->check() ? auth()->user()->nombre : 'No disponible' }}</p>
                 <p><strong>Email:</strong> {{ auth()->check() ? auth()->user()->correo : 'No disponible' }}</p>
                 <p><strong>Celular:</strong> {{ auth()->check() ? auth()->user()->celular : 'No disponible' }}</p>
@@ -143,6 +154,40 @@
     </div>
 </div>
 
+<!-- Modal de Detalle del Producto -->
+<div class="modal fade" id="modalDetalleProducto" tabindex="-1" aria-labelledby="modalDetalleProductoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalleProductoLabel">Detalles del Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="" alt="Imagen del Producto" class="img-fluid" id="detalle-imagen">
+                </div>
+                <div class="mt-3">
+                    <h6 class="nombre-producto">Nombre del Producto</h6>
+                    <p><strong>Categoría:</strong> <span class="categoria-producto">Sin categoría</span></p>
+                    <p><strong>Talla:</strong> <span class="talla-producto">No disponible</span></p>
+                    <p><strong>Precio:</strong> <span class="precio-producto">S/ 0.00</span></p>
+                    <p><strong>ID del Producto:</strong> <span class="id-producto">-</span></p>
+
+                    <!-- Sección para la cantidad -->
+                    <div class="mt-3">
+                        <label for="cantidadProducto">Cantidad:</label>
+                        <input type="number" class="form-control" id="cantidadProducto" value="1" min="1">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- Botón para agregar al carrito -->
+                <button type="button" class="btn btn-primary" id="btn-agregar-carrito" onclick="agregarAlCarritoDesdeModal()">Añadir al Carrito</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

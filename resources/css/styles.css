@@ -258,6 +258,46 @@ small {
 }
 /* Modal registro */
 /* Mayor espacio para el ícono */
+/* Asegúrate de que el carrito flotante no sea desplazado */
+/* Establecer el carrito flotante en la parte inferior y asegurarse de que se quede fijo */
+.carrito-flotante {
+    position: fixed;
+    bottom: 20px;  /* Asegura que esté en la parte inferior de la página */
+    right: 20px;   /* Asegura que esté al lado derecho de la página */
+    z-index: 999;  /* Asegura que esté por encima de otros elementos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo para la notificación de producto en el carrito */
+.carrito-flotante.notificacion {
+    background-color: rgba(13, 204, 45, 0.863); /* Fondo rojo cuando hay productos */
+    padding: 10px;
+    border-radius: 50%;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.carrito-flotante .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;  /* Rojo */
+}
+
+#carritoFlotante .notificacion {
+    display: inline-block;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+}
+
 
 
 

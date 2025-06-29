@@ -65,6 +65,18 @@
       <span class="link-text">Reportes</span>
     </a>
   </li>
+  <li>
+    <a href="{{ route('stock.index') }}" class="nav-link">
+      <i class="bi bi-boxes me-2"></i>
+      <span class="link-text">Stock</span>
+    </a>
+  </li>
+  <li>
+    <a href="{{route('datos-contacto.index')}}" class="nav-link">
+      <i class="bi bi-telephone me-2"></i>
+      <span class="link-text">Datos de Contacto</span>
+    </a>
+  </li>
 
   <li class="slide has-sub">
     <a href="#" class="nav-link toggle-submenu d-flex align-items-center justify-content-between">

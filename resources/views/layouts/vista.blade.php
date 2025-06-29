@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>@yield('title', 'Login - DB System')</title>
+  <title>@yield('title', 'AL Confecciones')</title>
   <link rel="icon" href="{{ asset('favicon.ico') }}">
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -41,7 +41,7 @@
         <ul class="navbar-nav ms-auto mb-2 mb-md-0 me-3">
           <li class="nav-item"><a class="nav-link text-white" href="{{ route('inicio.index') }}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="#">Categorías</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="#">Servicios</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="{{ route('datos-contacto.servicio') }}">Servicios</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="#">Nosotros</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="#">Contáctanos</a></li>
           @guest
@@ -49,7 +49,7 @@
           
           @endguest
            <!-- Icono Carrito -->
-          <li class="nav-item"> <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#modalCarrito" class="text-decoration-none position-relative">
+          <li class="nav-item"> <a class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#modalCarrito" class="text-decoration-none position-relative">
               <i class="fas fa-shopping-cart fa-lg"></i>
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="carrito-cantidad">0</span>
             </a>
@@ -74,6 +74,8 @@
                     <button type="submit" class="dropdown-item">Cerrar sesión</button>
                   </form>
                 </li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalPerfil">Mis pedidos</a></li>
+                
               </ul>
             </div>
           @endauth

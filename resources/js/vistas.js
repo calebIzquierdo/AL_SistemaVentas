@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         // Construir el HTML para cada producto
                         productosHTML += `
-                            <tr id="producto-${productId}">
+                            <tr id="producto-${productId}" data-product-id="${productId}">
                                 <td>${product.nombre}</td>
                                 <td>S/ ${product.precio}</td>
                                 <td>
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Actualizar el contenido del modal con los productos
                     $('#carrito-contenido').html(productosHTML);
                     // Actualizar el total en el modal
-                    $('#carrito-total').text(`S/ ${total.toFixed(2)}`);
+                    $('#carrito-total').text(`S/ ${total.toFixed(2)}`);  // Usar backticks (`` ` ``)
 
                     // Asignar evento para actualizar la cantidad de un producto
                     $('.cantidad').on('change', function() {
@@ -50,10 +50,16 @@ document.addEventListener("DOMContentLoaded", function() {
                         const nuevaCantidad = $(this).val();
                         actualizarCantidad(productId, nuevaCantidad);
                     });
+
+                    // Mostrar notificación en carrito flotante
+                    mostrarNotificacionCarrito(response.cart);
+
                 } else {
                     // Si el carrito está vacío
                     $('#carrito-contenido').html('<tr><td colspan="5" class="text-muted text-center">Tu carrito está vacío.</td></tr>');
                     $('#carrito-total').text('S/ 0.00');
+                    // Remover notificación de carrito flotante
+                    removerNotificacionCarrito();
                 }
             },
             error: function(xhr, status, error) {
@@ -61,6 +67,36 @@ document.addEventListener("DOMContentLoaded", function() {
                 $('#carrito-contenido').html('<tr><td colspan="5" class="text-muted text-center">Hubo un problema al cargar el carrito.</td></tr>');
             }
         });
+    }
+
+    window.mostrarDetalle = function(imagen, nombre, categoria, talla, precio, id) {
+         // Asignamos los valores del producto a los elementos del modal
+        $('#modalDetalleProducto .modal-body img').attr('src', imagen); // Imagen del producto
+        $('#modalDetalleProducto .modal-body .nombre-producto').text(nombre); // Nombre del producto
+        $('#modalDetalleProducto .modal-body .categoria-producto').text(categoria); // Categoría del producto
+        $('#modalDetalleProducto .modal-body .talla-producto').text(talla); // Talla del producto
+        $('#modalDetalleProducto .modal-body .precio-producto').text('S/ ' + precio); // Precio del producto
+        $('#modalDetalleProducto .modal-body .id-producto').text(id); // ID del producto, si lo deseas mostrar
+
+        // Establecer la cantidad inicial a 1
+        $('#modalDetalleProducto #cantidadProducto').val(1); 
+
+        // Si el modal está oculto, lo mostramos
+        $('#modalDetalleProducto').modal('show');
+    };
+
+    window.agregarAlCarritoDesdeModal = function() {
+        // Obtener los valores del modal
+        const productoId = $('#modalDetalleProducto .modal-body .id-producto').text();
+        const cantidad = parseInt($('#cantidadProducto').val()) || 1;  // Obtener la cantidad o usar 1 si no es válida
+        const nombre = $('#modalDetalleProducto .modal-body .nombre-producto').text();
+        const precio = $('#modalDetalleProducto .modal-body .precio-producto').text().replace('S/ ', '');
+    
+        // Llamar a la función para agregar al carrito
+        agregarAlCarritoDesdeCatalogo(productoId, nombre, precio, cantidad);
+        
+        // Cerrar el modal después de agregar al carrito
+        $('#modalDetalleProducto').modal('hide');
     }
 
     // Función para actualizar la cantidad de un producto
@@ -84,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // **Función QUITAR un producto del carrito**
-    // Aquí es donde defines la función quitarProducto globalmente
     window.quitarProducto = function(productId) {
         $.ajax({
             url: `/carrito/${productId}`,  // Ruta para eliminar el producto
@@ -95,13 +130,31 @@ document.addEventListener("DOMContentLoaded", function() {
             success: function(response) {
                 // Eliminar el producto de la tabla
                 $(`#producto-${productId}`).remove();
-                // Actualizar el total
+                // Actualizar el total del carrito
                 obtenerProductosDelCarrito();
             },
             error: function(xhr, status, error) {
                 console.error('Error al quitar el producto:', error);
             }
         });
+    }
+
+    // Función para mostrar la notificación en el carrito flotante cuando haya productos
+    function mostrarNotificacionCarrito(cart) {
+        const carritoFlotante = $('#carritoFlotante');
+        const carritoCantidad = Object.keys(cart).length;
+
+        // Si hay productos, mostrar el punto rojo con la cantidad de productos
+        if (carritoCantidad > 0) {
+            $('#carrito-cantidad').text(carritoCantidad).show();  // Mostrar la cantidad en el punto rojo
+        } else {
+            $('#carrito-cantidad').hide();  // Si no hay productos, ocultar el punto rojo
+        }
+    }
+
+    // Función para remover la notificación del carrito flotante cuando esté vacío
+    function removerNotificacionCarrito() {
+        $('#carrito-cantidad').hide();  // Ocultar el punto rojo cuando no haya productos
     }
 
     // Asignar el evento click al carrito flotante para mostrar el modal
@@ -111,8 +164,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Función para agregar un producto al carrito desde el catálogo
     function agregarAlCarritoDesdeCatalogo(productId, productoNombre, productoPrecio) {
-        console.log('Producto agregado al carrito:', productoNombre, 'Precio:', productoPrecio);
-
         $.ajax({
             url: routes.agregar, // Verifica que esta ruta esté bien definida
             method: 'POST',
@@ -121,14 +172,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 producto_nombre: productoNombre, 
                 producto_precio: productoPrecio, 
                 cantidad: 1, 
-                _token: $('meta[name="csrf-token"]').attr('content') // Asegúrate de que el token CSRF esté bien configurado
+                _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                console.log('Respuesta del servidor:', response); // Verifica lo que devuelve el servidor
                 if (response.cart) {
                     // Si la respuesta contiene el carrito, actualiza el carrito flotante
                     actualizarCarritoFlotante(response.cart); 
                 }
+                // Mostrar mensaje de confirmación de agregar al carrito
                 mostrarAlertaCarrito('Producto agregado al carrito', 'success');
             },
             error: function(xhr, status, error) {
@@ -138,10 +189,17 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Función para actualizar el carrito flotante con la cantidad de productos
+    // Función para actualizar el carrito flotante (el icono y la cantidad)
     function actualizarCarritoFlotante(cart) {
-        const cantidad = Object.keys(cart).reduce((total, key) => total + cart[key].cantidad, 0);
-        $('#carrito-cantidad').text(cantidad);  // Actualiza el contador de productos en el carrito flotante
+        const carritoFlotante = $('#carritoFlotante');
+        const carritoCantidad = Object.keys(cart).length;
+
+        // Si hay productos en el carrito, mostrar el número de productos en el ícono
+        if (carritoCantidad > 0) {
+            $('#carrito-cantidad').text(carritoCantidad).show();  // Mostrar la cantidad en el punto rojo
+        } else {
+            $('#carrito-cantidad').hide();  // Si no hay productos, ocultar el punto rojo
+        }
     }
 
     // Función para mostrar la alerta flotante cuando el carrito se actualiza
@@ -151,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         setTimeout(function() {
             $(alerta).fadeOut();
-        }, 3000);
+        }, 3000);  // La alerta desaparecerá después de 3 segundos
     }
 
     // Asignar el evento click a los botones "Añadir al carrito"
@@ -163,9 +221,48 @@ document.addEventListener("DOMContentLoaded", function() {
             const productName = this.getAttribute('data-product-name');
             const productPrice = this.getAttribute('data-product-price');
 
-            console.log('ID:', productId, 'Nombre:', productName, 'Precio:', productPrice); // Verificación de datos antes de enviar
             agregarAlCarritoDesdeCatalogo(productId, productName, productPrice);
         });
     });
 
+    // Función para finalizar la compra
+    $('#btn-finalizar').on('click', function() {
+        const productos = [];
+        let total = 0;
+    
+        // Obtener los productos del carrito
+        $('#carrito-contenido tr').each(function() {
+            const productId = $(this).data('product-id');
+            const cantidad = $(this).find('.cantidad').val();
+            const precio = $(this).find('td:nth-child(2)').text().replace('S/ ', ''); // Obtener el precio correctamente
+            const subTotal = cantidad * precio;
+            total += subTotal;
+    
+            productos.push({
+                id_producto: productId,
+                cantidad: cantidad,
+                sub_total: subTotal
+            });
+        });
+    
+        // Enviar la solicitud para finalizar la compra
+        $.ajax({
+            url: '/carrito/finalizar', 
+            method: 'POST',
+            data: {
+                productos: productos,
+                total: total,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                alert('Compra finalizada correctamente');
+                // Redirigir al usuario o limpiar el carrito
+                window.location.href = "/gracias"; // Puedes cambiar a la página que desees
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al finalizar la compra:', error);
+                alert('Hubo un problema al finalizar la compra');
+            }
+        });
+    });
 });
